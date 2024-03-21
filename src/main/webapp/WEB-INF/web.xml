@@ -29,4 +29,14 @@
     <servlet-name>RegisterEndpoint</servlet-name>
     <url-pattern>/RegisterEndpoint</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LoginEndpoint</display-name>
+    <servlet-name>LoginEndpoint</servlet-name>
+    <servlet-class>it.justsport.api.endpoint.LoginEndpoint</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginEndpoint</servlet-name>
+    <url-pattern>/LoginEndpoint</url-pattern>
+  </servlet-mapping>
 </web-app>

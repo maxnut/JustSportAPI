@@ -1,41 +1,31 @@
 package it.justsport.api;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
+
+import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class ConnectionManager {
 	
-	private String databaseURL = "";
-	private String databaseUsername = "";
-	private String databasePassword = "";
-	
+	private static ConnectionManager instance;
 	private Connection databaseConnection;
 	
-	private static HashMap<String, ConnectionManager> connections = new HashMap<String, ConnectionManager>();
-	
-	public static ConnectionManager getConnection(String databaseURL, String databaseUsername, String databasePassword) throws ClassNotFoundException, SQLException
+	public static ConnectionManager get() throws ClassNotFoundException, SQLException
 	{
-		if(!connections.containsKey(databaseURL))
-			connections.put(databaseURL, new ConnectionManager(databaseURL, databaseUsername, databasePassword));
+		if(instance == null)
+			instance = new ConnectionManager("jdbc:mysql://localhost:3306/justsport", "root", "qwertyuiop"); //TODO: get this data from elsewhere
 		
-		return connections.get(databaseURL);
+		return instance;
 	}
 	
-	private ConnectionManager(String databaseURL, String databaseUsername, String databasePassword) throws ClassNotFoundException, SQLException
+	public ConnectionManager(String url, String username, String password) throws ClassNotFoundException, SQLException
 	{
-		this.databaseURL = databaseURL;
-		this.databaseUsername = databaseUsername;
-		this.databasePassword = databasePassword;
-		
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		
-		this.databaseConnection = DriverManager.getConnection(databaseURL, databaseUsername, databasePassword);
-		connections.put(databaseURL, this);
+		MysqlDataSource ds = new MysqlDataSource();
+		ds.setURL(url);
+		this.databaseConnection =  ds.getConnection(username, password);
 	}
 	
 	public ResultSet executeQuery(String sql) throws SQLException
@@ -48,13 +38,9 @@ public class ConnectionManager {
 	
 	public PreparedStatement prepareQuery(String sql) throws SQLException
 	{
-		return databaseConnection.prepareStatement(sql);
-	}
-	
-	public void closeConnection() throws SQLException
-	{
-		databaseConnection.close();
-		connections.remove(databaseURL);
+		PreparedStatement statement = databaseConnection.prepareStatement(sql);
+		statement.closeOnCompletion();
+		return statement;
 	}
 
 }
