@@ -3,6 +3,7 @@ package it.justsport.api.endpoint;
 import java.io.IOException;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +17,8 @@ public class Responses {
 		REGISTER_BAD_TYPE("The provided type is invalid.", 454),
 		EMPTY_DATA("One or more fields are empty.", 400),
 		LOGIN_OK("Login successful.", 200),
-		LOGIN_WRONG("Wrong username or password.", 452);
+		LOGIN_WRONG("Wrong username or password.", 452),
+		OK("", 200);
 
 		private String message;
 		private int code;
@@ -41,6 +43,20 @@ public class Responses {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("response_message", response.getMessage());
 		obj.addProperty("response_code", response.getCode());
+		
+		responseObject.setContentType("application/json");
+		responseObject.setStatus(response.getCode());
+		responseObject.getWriter().append(gson.toJson(obj));
+	}
+	
+	public static void respondWithObject(HttpServletResponse responseObject, Response response, JsonElement object) throws IOException
+	{
+		Gson gson = new Gson();
+		JsonObject obj = new JsonObject();
+		obj.addProperty("response_message", response.getMessage());
+		obj.addProperty("response_code", response.getCode());
+		
+		obj.add("response_content", object);
 		
 		responseObject.setContentType("application/json");
 		responseObject.setStatus(response.getCode());

@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import it.justsport.api.bean.UserBean;
 import it.justsport.api.dao.UserDAO;
 import it.justsport.api.endpoint.Responses.Response;
-import it.justsport.api.table.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -31,8 +31,6 @@ public class RegisterEndpoint extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String type = request.getParameter("type");
-		
-		System.out.println(type + " saidhsiaodhsoadhsoaidh");
 
 		if (email == null || password == null || type == null) {
 			Responses.respond(response, Response.EMPTY_DATA);
@@ -51,7 +49,7 @@ public class RegisterEndpoint extends HttpServlet {
 		}
 
 		try {
-			User user = new User(email, password, type, true);
+			UserBean user = new UserBean(email, password, type, true);
 
 			if (UserDAO.insertUser(user) > 0)
 				Responses.respond(response, Response.REGISTER_OK);

@@ -39,4 +39,24 @@
     <servlet-name>LoginEndpoint</servlet-name>
     <url-pattern>/LoginEndpoint</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetAllTournamentsEndpoint</display-name>
+    <servlet-name>GetAllTournamentsEndpoint</servlet-name>
+    <servlet-class>it.justsport.api.endpoint.GetAllTournamentsEndpoint</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAllTournamentsEndpoint</servlet-name>
+    <url-pattern>/GetAllTournamentsEndpoint</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetAllTeamsEndpoint</display-name>
+    <servlet-name>GetAllTeamsEndpoint</servlet-name>
+    <servlet-class>it.justsport.api.endpoint.GetAllTeamsEndpoint</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAllTeamsEndpoint</servlet-name>
+    <url-pattern>/GetAllTeamsEndpoint</url-pattern>
+  </servlet-mapping>
 </web-app>

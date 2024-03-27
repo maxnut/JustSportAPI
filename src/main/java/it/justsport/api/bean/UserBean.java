@@ -1,9 +1,9 @@
-package it.justsport.api.table;
+package it.justsport.api.bean;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
-public class User {
+public class UserBean {
 	
 	private int id = -1;
 	public String email;
@@ -11,9 +11,9 @@ public class User {
 	
 	private transient String password;
 	
-	public User() {}
+	public UserBean() {}
 	
-	public User(int id, String email, String password, String type, boolean doHash)
+	public UserBean(int id, String email, String password, String type, boolean doHash)
 	{
 		this.id = id;
 		this.email = email;
@@ -21,7 +21,7 @@ public class User {
 		this.type = type;
 	}
 	
-	public User(String email, String password, String type, boolean doHash)
+	public UserBean(String email, String password, String type, boolean doHash)
 	{
 		this.email = email;
 		setPassword(password, doHash);

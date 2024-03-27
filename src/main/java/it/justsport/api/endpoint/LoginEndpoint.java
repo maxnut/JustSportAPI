@@ -7,7 +7,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import it.justsport.api.dao.UserDAO;
 import it.justsport.api.endpoint.Responses.Response;
-import it.justsport.api.table.User;
+import it.justsport.api.bean.UserBean;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,7 +34,7 @@ public class LoginEndpoint extends HttpServlet {
 		}
 		
 		try {
-			User user = UserDAO.getUserByEmail(email);
+			UserBean user = UserDAO.getUserByEmail(email);
 			
 			if(user == null)
 			{

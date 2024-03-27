@@ -5,23 +5,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import it.justsport.api.ConnectionManager;
-import it.justsport.api.table.User;
+import it.justsport.api.bean.UserBean;
 
 public class UserDAO {
 	
-	private static User getUserFromResult(ResultSet result) throws SQLException
+	private static UserBean getUserFromResult(ResultSet result) throws SQLException
 	{
-		User user = null;
+		UserBean user = null;
 		
 		while(result.next())
-			user = new User(result.getInt("id"), result.getString("email"), result.getString("password"), result.getString("type"), false);
+			user = new UserBean(result.getInt("id"), result.getString("email"), result.getString("password"), result.getString("type"), false);
 		
 		result.close();
 		
 		return user;
 	}
 	
-	public static User getUserByID(int id) throws SQLException, ClassNotFoundException
+	public static UserBean getUserByID(int id) throws SQLException, ClassNotFoundException
 	{
 		ConnectionManager manager = ConnectionManager.get();
 		
@@ -31,7 +31,7 @@ public class UserDAO {
 		return getUserFromResult(query.executeQuery());
 	}
 	
-	public static User getUserByEmail(String email) throws SQLException, ClassNotFoundException
+	public static UserBean getUserByEmail(String email) throws SQLException, ClassNotFoundException
 	{
 		ConnectionManager manager = ConnectionManager.get();
 		
@@ -41,7 +41,7 @@ public class UserDAO {
 		return getUserFromResult(query.executeQuery());
 	}
 	
-	public static int insertUser(User user) throws SQLException, ClassNotFoundException
+	public static int insertUser(UserBean user) throws SQLException, ClassNotFoundException
 	{
 		ConnectionManager manager = ConnectionManager.get();
 		
