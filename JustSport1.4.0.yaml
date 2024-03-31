@@ -1,0 +1,256 @@
+swagger: '2.0'
+info:
+  title: JustSport API
+  version: 1.0.0
+basePath: /JustSportAPI
+host: localhost:8080
+schemes:
+  - http
+paths:
+  /login:
+    post:
+      summary: Endpoint for user login
+      description: Authenticate user by email and password.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: formData
+          description: User's email address
+          required: false
+          type: string
+        - name: password
+          in: formData
+          description: User's password
+          required: false
+          type: string
+      responses:
+        '200':
+          description: User successfully logged in
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: Login successful
+              response_code:
+                type: integer
+                example: 200
+        '400':
+          description: Invalid request parameters
+          schema:
+              $ref: '#/definitions/Error'
+        '452':
+          description: Login failed
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: Wrong username or password.
+              response_code:
+                type: integer
+                example: 452
+  /register:
+    post:
+      summary: Endpoint for user registration
+      description: Register a new user with email and password.
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: formData
+          description: User's email address
+          required: false
+          type: string
+        - name: password
+          in: formData
+          description: User's password
+          required: false
+          type: string
+        - name: type
+          in: formData
+          description: User's type
+          required: false
+          type: string
+          enum: [stu, doc, ama]
+      responses:
+        '200':
+          description: User successfully registered
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: User registered.
+              response_code:
+                type: integer
+                example: 200
+        '400':
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/Error'
+        '452':
+          description: User already exists
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: User with this email already exists.
+              response_code:
+                type: integer
+                example: 452
+        '453':
+          description: The provided email is invalid
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: The provided email is invalid.
+              response_code:
+                type: integer
+                example: 453
+        '454':
+          description: The provided type is invalid
+          schema:
+            type: object
+            properties:
+              response_message:
+                type: string
+                example: The provided type is invalid.
+              response_code:
+                type: integer
+                example: 454
+  /AddTournament:
+    post:
+      summary: Adds a new tornament
+      description: Adds a new tornament to the table "Tournament"
+      consumes:
+        - application/json
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: formData
+          description: id of the tournament
+          required: true
+          type: integer
+          
+        - name: start_date
+          in: formData
+          description: starting date of the tournamnet
+          required: true
+          type: string
+        
+        - name: end_date
+          in: formData
+          description: ending date of the tournamnet
+          required: true
+          type: string
+          
+        - name: subscription_date
+          in: formData
+          description: last date for the subscription
+          required: true
+          type: string
+          
+        - name: type
+          in: formData
+          description: type of tournament (amateur or scholastic)
+          required: true
+          type: string
+          enum: [amatoriale, extrascolastico]
+          
+        - name: max_subscription
+          in: formData
+          description: maximum number of team
+          required: true
+          type: integer
+          
+        - name: min_subscription
+          in: formData
+          description: minimum number of team
+          required: true
+          type: integer
+        
+        - name: match_count
+          in: formData
+          description: number of match of the tournament
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: Tournament added successfully
+          schema:
+            $ref: '#/definitions/Response'
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Error'
+  /ShowTournaments:
+    post:
+      summary: Shows all the torunaments
+      description: Returns all the torunaments in the databese
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Tournamnets list
+          schema:
+            $ref: '#/definitions/TournamentList'
+        '500':
+          description: Error of the server
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    type: object
+    properties:
+      response_message:
+        type: string
+        example: One or more fields are empty.
+      response_code:
+        type: integer
+        example: 400
+  Tournament:
+    type: object
+    properties:
+      name:
+        type: string
+      start_date:
+        type: string
+        format: date
+      end_date:
+        type: string
+        format: date
+      subscription_date:
+        type: string
+        format: date
+      type:
+        type: string
+        enum: [amatoriale, extrascolastico]
+      max_subscriptions:
+        type: integer
+      min_subscriptions:
+        type: integer
+      match_count:
+        type: integer
+  Response:
+    type: object
+    properties:
+      response_message:
+        type: string
+      response_code:
+        type: integer
+  TournamentList:
+    type: array
+    items:
+      $ref: '#/definitions/Tournament'
