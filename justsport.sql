@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 17, 2024 alle 11:11
+-- Creato il: Apr 17, 2024 alle 11:20
 -- Versione del server: 10.4.6-MariaDB
 -- Versione PHP: 7.3.9
 
@@ -87,7 +87,8 @@ CREATE TABLE `tournaments` (
   `max_subscriptions` int(11) NOT NULL,
   `min_subscriptions` int(11) NOT NULL,
   `match_count` int(11) NOT NULL,
-  `sport` varchar(50) NOT NULL
+  `sport` varchar(50) NOT NULL,
+  `owner_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -149,7 +150,8 @@ ALTER TABLE `team_subscriptions`
 -- Indici per le tabelle `tournaments`
 --
 ALTER TABLE `tournaments`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_owner_id` (`owner_id`);
 
 --
 -- Indici per le tabelle `users`
@@ -224,6 +226,12 @@ ALTER TABLE `subscriptions`
 ALTER TABLE `team_subscriptions`
   ADD CONSTRAINT `team_subscriptions_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `team_subscriptions_ibfk_2` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `tournaments`
+--
+ALTER TABLE `tournaments`
+  ADD CONSTRAINT `fk_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
