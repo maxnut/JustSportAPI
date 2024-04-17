@@ -4,16 +4,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+
+import it.justsport.api.Responses;
+import it.justsport.api.Responses.Response;
 import it.justsport.api.bean.UserBean;
 import it.justsport.api.dao.UserDAO;
-import it.justsport.api.endpoint.Responses.Response;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/register")
+@WebServlet("/user/register")
 public class RegisterEndpoint extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -25,6 +28,11 @@ public class RegisterEndpoint extends HttpServlet {
 	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
 	private static final Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doPost(request, response);
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -52,7 +60,7 @@ public class RegisterEndpoint extends HttpServlet {
 			UserBean user = new UserBean(email, password, type, true);
 
 			if (UserDAO.insertUser(user) > 0)
-				Responses.respond(response, Response.REGISTER_OK);
+				Responses.respondWithObject(response, Response.REGISTER_OK, new Gson().toJsonTree(user));
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

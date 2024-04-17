@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import it.justsport.api.ConnectionManager;
+import it.justsport.api.InsertResult;
 import it.justsport.api.bean.UserBean;
 
 public class UserDAO {
@@ -21,12 +22,12 @@ public class UserDAO {
 		return user;
 	}
 	
-	public static UserBean getUserByID(int id) throws SQLException, ClassNotFoundException
+	public static UserBean getUserByID(long id) throws SQLException, ClassNotFoundException
 	{
 		ConnectionManager manager = ConnectionManager.get();
 		
 		PreparedStatement query = manager.prepareQuery("SELECT * FROM users WHERE id = ?");
-		query.setInt(1, id);
+		query.setLong(1, id);
 		
 		return getUserFromResult(query.executeQuery());
 	}
@@ -50,7 +51,11 @@ public class UserDAO {
 		registerQuery.setString(2, user.getPassword());
 		registerQuery.setString(3, user.type);
 		
-		return registerQuery.executeUpdate();
+		InsertResult result = manager.executeInsert(registerQuery);
+		
+		user.id = result.newId;
+		
+		return result.rowsAffected;
 	}
 	
 }

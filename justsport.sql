@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 17, 2024 alle 11:20
+-- Creato il: Apr 17, 2024 alle 10:54
 -- Versione del server: 10.4.6-MariaDB
 -- Versione PHP: 7.3.9
 
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `matches` (
-  `id_matches` int(11) NOT NULL,
-  `home_team` int(11) DEFAULT NULL,
-  `away_team` int(11) DEFAULT NULL,
-  `match_date` date NOT NULL,
-  `id_tournament` int(11) NOT NULL
+  `ID_Matches` int(11) NOT NULL,
+  `HomeTeam` int(11) DEFAULT NULL,
+  `AwayTeam` int(11) DEFAULT NULL,
+  `MatchDate` date NOT NULL,
+  `Id_Tournament` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -86,9 +86,7 @@ CREATE TABLE `tournaments` (
   `type` enum('amatoriale','extrascolastico') NOT NULL,
   `max_subscriptions` int(11) NOT NULL,
   `min_subscriptions` int(11) NOT NULL,
-  `match_count` int(11) NOT NULL,
-  `sport` varchar(50) NOT NULL,
-  `owner_id` int(11) NOT NULL
+  `match_count` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -119,10 +117,10 @@ INSERT INTO `users` (`id`, `email`, `password`, `type`) VALUES
 -- Indici per le tabelle `matches`
 --
 ALTER TABLE `matches`
-  ADD PRIMARY KEY (`id_matches`),
-  ADD KEY `fk_matches_id_tournament` (`id_tournament`),
-  ADD KEY `fk_matches_hometeam` (`home_team`),
-  ADD KEY `fk_matches_awayteam` (`away_team`);
+  ADD PRIMARY KEY (`ID_Matches`),
+  ADD KEY `fk_matches_id_tournament` (`Id_Tournament`),
+  ADD KEY `fk_matches_hometeam` (`HomeTeam`),
+  ADD KEY `fk_matches_awayteam` (`AwayTeam`);
 
 --
 -- Indici per le tabelle `subscriptions`
@@ -150,8 +148,7 @@ ALTER TABLE `team_subscriptions`
 -- Indici per le tabelle `tournaments`
 --
 ALTER TABLE `tournaments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_owner_id` (`owner_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `users`
@@ -167,7 +164,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `matches`
 --
 ALTER TABLE `matches`
-  MODIFY `id_matches` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Matches` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `subscriptions`
@@ -207,10 +204,10 @@ ALTER TABLE `users`
 -- Limiti per la tabella `matches`
 --
 ALTER TABLE `matches`
-  ADD CONSTRAINT `fk_matches_awayteam` FOREIGN KEY (`away_team`) REFERENCES `team_subscriptions` (`team_id`),
-  ADD CONSTRAINT `fk_matches_hometeam` FOREIGN KEY (`home_team`) REFERENCES `team_subscriptions` (`team_id`),
-  ADD CONSTRAINT `fk_matches_id_awayteam` FOREIGN KEY (`home_team`) REFERENCES `team_subscriptions` (`team_id`),
-  ADD CONSTRAINT `fk_matches_id_hometeam` FOREIGN KEY (`home_team`) REFERENCES `team_subscriptions` (`team_id`),
+  ADD CONSTRAINT `fk_matches_awayteam` FOREIGN KEY (`AwayTeam`) REFERENCES `team_subscriptions` (`team_id`),
+  ADD CONSTRAINT `fk_matches_hometeam` FOREIGN KEY (`HomeTeam`) REFERENCES `team_subscriptions` (`team_id`),
+  ADD CONSTRAINT `fk_matches_id_awayteam` FOREIGN KEY (`HomeTeam`) REFERENCES `team_subscriptions` (`team_id`),
+  ADD CONSTRAINT `fk_matches_id_hometeam` FOREIGN KEY (`HomeTeam`) REFERENCES `team_subscriptions` (`team_id`),
   ADD CONSTRAINT `fk_matches_id_tournament` FOREIGN KEY (`Id_Tournament`) REFERENCES `tournaments` (`id`);
 
 --
@@ -226,12 +223,6 @@ ALTER TABLE `subscriptions`
 ALTER TABLE `team_subscriptions`
   ADD CONSTRAINT `team_subscriptions_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `team_subscriptions_ibfk_2` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `tournaments`
---
-ALTER TABLE `tournaments`
-  ADD CONSTRAINT `fk_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

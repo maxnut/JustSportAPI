@@ -5,7 +5,7 @@ import de.mkammerer.argon2.Argon2Factory;
 
 public class UserBean {
 	
-	private int id = -1;
+	public long id = -1;
 	public String email;
 	public String type;
 	
@@ -13,7 +13,7 @@ public class UserBean {
 	
 	public UserBean() {}
 	
-	public UserBean(int id, String email, String password, String type, boolean doHash)
+	public UserBean(long id, String email, String password, String type, boolean doHash)
 	{
 		this.id = id;
 		this.email = email;
@@ -31,11 +31,6 @@ public class UserBean {
 	public String getPassword()
 	{
 		return password;
-	}
-	
-	public int getID()
-	{
-		return id;
 	}
 	
 	public void setPassword(String password, boolean doHash)

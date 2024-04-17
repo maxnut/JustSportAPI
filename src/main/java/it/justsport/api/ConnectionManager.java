@@ -16,7 +16,7 @@ public class ConnectionManager {
 	public static ConnectionManager get() throws ClassNotFoundException, SQLException
 	{
 		if(instance == null)
-			instance = new ConnectionManager("jdbc:mysql://localhost:3306/justsport", "root", ""); //TODO: get this data from elsewhere
+			instance = new ConnectionManager("jdbc:mysql://localhost:3306/justsport", "root", "qwertyuiop"); //TODO: get this data from elsewhere
 		
 		return instance;
 	}
@@ -38,9 +38,21 @@ public class ConnectionManager {
 	
 	public PreparedStatement prepareQuery(String sql) throws SQLException
 	{
-		PreparedStatement statement = databaseConnection.prepareStatement(sql);
+		PreparedStatement statement = databaseConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		statement.closeOnCompletion();
 		return statement;
+	}
+	
+	public InsertResult executeInsert(PreparedStatement statement) throws SQLException
+	{
+		InsertResult result = new InsertResult();
+		result.rowsAffected = statement.executeUpdate();
+		
+		ResultSet key = statement.getGeneratedKeys();
+		if(key.next())
+			result.newId = key.getLong(1);
+		
+		return result;
 	}
 
 }
