@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=${JUSTSPORT_DB_PASSWORD}
+    networks:
+      - backend
+    volumes:
+      - "./target/mariadb:/var/lib/mysql"
+      - "./init.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  api:
+    build: .
+    restart: always
+    environment:
+      - DATABASE_HOST=jdbc:mariadb://db:3306/justsport
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=${JUSTSPORT_DB_PASSWORD}
+    ports:
+      - 8002:8080
+    depends_on:
+      - db
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: JustSport backend network
+    driver: bridge
