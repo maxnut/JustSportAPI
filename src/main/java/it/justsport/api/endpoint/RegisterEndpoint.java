@@ -38,9 +38,8 @@ public class RegisterEndpoint extends HttpServlet {
 			throws ServletException, IOException {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		String type = request.getParameter("type");
 
-		if (email == null || password == null || type == null) {
+		if (email == null || password == null) {
 			Responses.respond(response, Response.EMPTY_DATA);
 			return;
 		}
@@ -50,6 +49,16 @@ public class RegisterEndpoint extends HttpServlet {
 			return;
 		}
 		
+		String type = "";
+		
+		if(email.endsWith("aldini.istruzioneer.it"))
+			type = "stu";
+		else if(email.endsWith("avbo.it"))
+			type = "doc";
+		else
+			type = "ama";
+		
+		//aldini.istruzioneer.it avbo.it
 		if(!type.equals("stu") && !type.equals("ama") && !type.equals("doc"))
 		{
 			Responses.respond(response, Response.REGISTER_BAD_TYPE);

@@ -11,7 +11,10 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 public class ConnectionManager {
 	
 	private static ConnectionManager instance;
-	private Connection databaseConnection;
+	
+	private String url, username, password;
+	
+	private MysqlDataSource dataSource = null;
 	
 	public static ConnectionManager get() throws ClassNotFoundException, SQLException
 	{
@@ -27,14 +30,22 @@ public class ConnectionManager {
 	
 	public ConnectionManager(String url, String username, String password) throws ClassNotFoundException, SQLException
 	{
-		MysqlDataSource ds = new MysqlDataSource();
-		ds.setURL(url);
-		this.databaseConnection =  ds.getConnection(username, password);
+		this.url = url;
+		this.username = username;
+		this.password = password;
+		
+		dataSource = new MysqlDataSource();
+		dataSource.setURL(url);
 	}
 	
+	public Connection getConnection() throws SQLException
+	{
+		return dataSource.getConnection(username, password);
+	}
+		
 	public ResultSet executeQuery(String sql) throws SQLException
 	{
-		Statement st = databaseConnection.createStatement();
+		Statement st = getConnection().createStatement();
 		ResultSet queryResult = st.executeQuery(sql);
 		
 		return queryResult;
@@ -42,7 +53,7 @@ public class ConnectionManager {
 	
 	public PreparedStatement prepareQuery(String sql) throws SQLException
 	{
-		PreparedStatement statement = databaseConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		statement.closeOnCompletion();
 		return statement;
 	}
