@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>JustSportAPI</groupId>
 	<artifactId>JustSportAPI</artifactId>
-	<version>0.4.1</version>
+	<version>0.4.2</version>
 	<packaging>war</packaging>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->

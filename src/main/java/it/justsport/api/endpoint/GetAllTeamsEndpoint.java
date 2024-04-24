@@ -29,7 +29,7 @@ public class GetAllTeamsEndpoint extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 
-			if (request.getSession().getAttribute("user_id") == null) {
+			if(!request.isRequestedSessionIdValid()) {
 				Responses.respond(response, Response.UNAUTHORIZED);
 				return;
 			}

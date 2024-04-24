@@ -23,7 +23,7 @@ public class TournamentSubscribeEndpoint extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("user_id") == null)
+		if(!request.isRequestedSessionIdValid())
 		{
 			Responses.respond(response, Response.UNAUTHORIZED);
 			return;

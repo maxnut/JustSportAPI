@@ -20,7 +20,7 @@ public class VersionEndpoint extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("0.4.1"); //💀💀💀💀💀
+		response.getWriter().append("0.4.2"); //💀💀💀💀💀
 	}
 
 	

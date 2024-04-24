@@ -128,4 +128,14 @@
     <servlet-name>TournamentSubscribeEndpoint</servlet-name>
     <url-pattern>/TournamentSubscribeEndpoint</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VersionEndpoint</display-name>
+    <servlet-name>VersionEndpoint</servlet-name>
+    <servlet-class>it.justsport.api.endpoint.VersionEndpoint</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VersionEndpoint</servlet-name>
+    <url-pattern>/VersionEndpoint</url-pattern>
+  </servlet-mapping>
 </web-app>
