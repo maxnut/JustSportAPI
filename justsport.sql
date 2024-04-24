@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 17, 2024 alle 10:54
--- Versione del server: 10.4.6-MariaDB
--- Versione PHP: 7.3.9
+-- Creato il: Apr 24, 2024 alle 11:44
+-- Versione del server: 10.4.28-MariaDB
+-- Versione PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -34,7 +33,7 @@ CREATE TABLE `matches` (
   `AwayTeam` int(11) DEFAULT NULL,
   `MatchDate` date NOT NULL,
   `Id_Tournament` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -46,7 +45,7 @@ CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -57,7 +56,7 @@ CREATE TABLE `subscriptions` (
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,7 @@ CREATE TABLE `team_subscriptions` (
   `id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
   `tournament_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -87,7 +86,7 @@ CREATE TABLE `tournaments` (
   `max_subscriptions` int(11) NOT NULL,
   `min_subscriptions` int(11) NOT NULL,
   `match_count` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -99,15 +98,20 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(64) NOT NULL,
   `password` varchar(128) NOT NULL,
-  `type` varchar(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `type` varchar(3) NOT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `surname` varchar(20) DEFAULT NULL,
+  `gender` tinyint(1) DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `hobbies` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dump dei dati per la tabella `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `type`) VALUES
-(1, 'docente@aldini.istruzioneer.it', '$argon2i$v=19$m=65536,t=10,p=1$ZT+ETUhsgkuQ+OBFjAXa3g$SuecDpuSlBL3GwREdKlTiB4TDvTSi3CmMgJWiwvGj38', 'doc');
+INSERT INTO `users` (`id`, `email`, `password`, `type`, `name`, `surname`, `gender`, `birthdate`, `hobbies`) VALUES
+(1, 'docente@aldini.istruzioneer.it', '$argon2i$v=19$m=65536,t=10,p=1$ZT+ETUhsgkuQ+OBFjAXa3g$SuecDpuSlBL3GwREdKlTiB4TDvTSi3CmMgJWiwvGj38', 'doc', NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indici per le tabelle scaricate
