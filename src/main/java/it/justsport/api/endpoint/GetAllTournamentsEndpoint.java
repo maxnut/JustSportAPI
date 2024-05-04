@@ -8,8 +8,8 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.TournamentBean;
 import it.justsport.api.dao.TournamentDAO;
+import it.justsport.api.table.Tournament;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,13 +35,11 @@ public class GetAllTournamentsEndpoint extends HttpServlet {
 			}
 
 			String type = request.getParameter("type");
+			String startDate = request.getParameter("start_date");
 
-			ArrayList<TournamentBean> tournaments = null;
+			ArrayList<Tournament> tournaments = null;
 
-			if (type == null)
-				tournaments = TournamentDAO.getTournaments();
-			else
-				tournaments = TournamentDAO.getTournamentsByType(type);
+			tournaments = TournamentDAO.getTournaments(type, startDate);
 
 			Gson gson = new Gson();
 			Responses.respondWithObject(response, Response.OK, gson.toJsonTree(tournaments));

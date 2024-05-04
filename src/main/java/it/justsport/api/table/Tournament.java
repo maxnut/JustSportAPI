@@ -1,10 +1,10 @@
-package it.justsport.api.bean;
+package it.justsport.api.table;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TournamentBean {
+public class Tournament {
 	
 	public long id = -1;
 	public long ownerID = -1;
@@ -18,9 +18,9 @@ public class TournamentBean {
 	public int minSubscriptions;
 	public int matchCount;
 	
-	public List<TeamBean> teams = new ArrayList<TeamBean>();
+	public List<Team> teams = new ArrayList<Team>();
 	
-	public TournamentBean(long id, long ownerID, String name, String sport, Date startDate, Date endDate, Date subscriptionDate, String type,
+	public Tournament(long id, long ownerID, String name, String sport, Date startDate, Date endDate, Date subscriptionDate, String type,
 			int maxSubscriptions, int minSubscriptions, int matchCount) {
 		super();
 		this.id = id;
@@ -36,7 +36,7 @@ public class TournamentBean {
 		this.matchCount = matchCount;
 	}
 	
-	public TournamentBean(long ownerID, String name, String sport, Date startDate, Date endDate, Date subscriptionDate, String type,
+	public Tournament(long ownerID, String name, String sport, Date startDate, Date endDate, Date subscriptionDate, String type,
 			int maxSubscriptions, int minSubscriptions, int matchCount) {
 		super();
 		this.ownerID = ownerID; 

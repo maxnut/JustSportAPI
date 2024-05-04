@@ -8,10 +8,10 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.TournamentBean;
-import it.justsport.api.bean.UserBean;
 import it.justsport.api.dao.TournamentDAO;
 import it.justsport.api.dao.UserDAO;
+import it.justsport.api.table.Tournament;
+import it.justsport.api.table.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -44,7 +44,7 @@ public class AddTournamentEndpoint extends HttpServlet {
 		long userID = (long)request.getSession().getAttribute("user_id");
 		
 		try {
-			UserBean user = UserDAO.getUserByID(userID);
+			User user = UserDAO.getUserByID(userID);
 			if(user.type.equals("stu"))
 			{
 				Responses.respond(response, Response.UNAUTHORIZED);
@@ -74,7 +74,7 @@ public class AddTournamentEndpoint extends HttpServlet {
 		
 		Gson gson = new Gson();
 
-		TournamentBean tournament = new TournamentBean(userID, name, sport, Date.valueOf(startDate), Date.valueOf(endDate),
+		Tournament tournament = new Tournament(userID, name, sport, Date.valueOf(startDate), Date.valueOf(endDate),
 				Date.valueOf(subDate), type, Integer.parseInt(maxSubscriptions), Integer.parseInt(minSubscriptions),
 				Integer.parseInt(matchCount));
 		

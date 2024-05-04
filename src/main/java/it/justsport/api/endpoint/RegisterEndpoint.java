@@ -8,8 +8,8 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.UserBean;
 import it.justsport.api.dao.UserDAO;
+import it.justsport.api.table.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -66,7 +66,7 @@ public class RegisterEndpoint extends HttpServlet {
 		}
 
 		try {
-			UserBean user = new UserBean(email, password, type, true);
+			User user = new User(email, password, type, true);
 
 			if (UserDAO.insertUser(user) > 0)
 				Responses.respondWithObject(response, Response.REGISTER_OK, new Gson().toJsonTree(user));

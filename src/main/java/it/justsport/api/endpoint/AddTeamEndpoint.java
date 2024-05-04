@@ -7,8 +7,8 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.TeamBean;
 import it.justsport.api.dao.TeamDAO;
+import it.justsport.api.table.Team;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -45,7 +45,7 @@ public class AddTeamEndpoint extends HttpServlet {
 		
 		Gson gson = new Gson();
 		
-		TeamBean team = new TeamBean(name);
+		Team team = new Team(name);
 		
 		try {
 			if(TeamDAO.insertTeam(team) > 0)

@@ -7,34 +7,50 @@ import java.util.ArrayList;
 
 import it.justsport.api.ConnectionManager;
 import it.justsport.api.InsertResult;
-import it.justsport.api.bean.TeamBean;
-import it.justsport.api.bean.TournamentBean;
-import it.justsport.api.bean.UserBean;
+import it.justsport.api.table.Team;
+import it.justsport.api.table.User;
 
 public class TeamDAO {
-	public static ArrayList<TeamBean> getTeamsFromResult(ResultSet result) throws SQLException {
-		ArrayList<TeamBean> list = new ArrayList<TeamBean>();
+	public static ArrayList<Team> getTeamsFromResult(ResultSet result) throws SQLException, ClassNotFoundException {
+		ArrayList<Team> list = new ArrayList<Team>();
+		
+		Team team = null;
 
-		while (result.next()) {
-			TeamBean team = new TeamBean(result.getInt("id"), result.getString("name"));
+		do {
+			team = getTeamFromResult(result);
 
-			list.add(team);
-		}
+			if(team != null)
+				list.add(team);
+		} while(team != null);
 
 		return list;
 	}
 	
-	public static TeamBean getTeamFromResult(ResultSet result) throws SQLException {
-		TeamBean team = null;
+	public static Team getTeamFromResult(ResultSet result) throws SQLException, ClassNotFoundException {
+		Team team = null;
 
-		while (result.next()) {
-			team = new TeamBean(result.getInt("id"), result.getString("name"));
+		if (result.next()) {
+			ConnectionManager manager = ConnectionManager.get();
+			
+			team = new Team(result.getInt("id"), result.getString("name"));
+			
+			PreparedStatement membersQuery = manager.prepareQuery("SELECT user_id FROM subscriptions WHERE team_id = ?");
+			membersQuery.setLong(1, team.id);
+			
+			ResultSet memberResult = membersQuery.executeQuery();
+			
+			while(memberResult.next())
+			{
+				long userID = memberResult.getLong("user_id");
+				User user = UserDAO.getUserByID(userID);
+				team.members.add(user);
+			}
 		}
 
 		return team;
 	}
 	
-	public static TeamBean getTeamByID(long id) throws SQLException, ClassNotFoundException
+	public static Team getTeamByID(long id) throws SQLException, ClassNotFoundException
 	{
 		ConnectionManager manager = ConnectionManager.get();
 		
@@ -44,13 +60,13 @@ public class TeamDAO {
 		return getTeamFromResult(query.executeQuery());
 	}
 
-	public static ArrayList<TeamBean> getTeams() throws ClassNotFoundException, SQLException {
+	public static ArrayList<Team> getTeams() throws ClassNotFoundException, SQLException {
 		ConnectionManager manager = ConnectionManager.get();
 		PreparedStatement query = manager.prepareQuery("SELECT * FROM team");
 
-		ArrayList<TeamBean> teams = getTeamsFromResult(query.executeQuery());
+		ArrayList<Team> teams = getTeamsFromResult(query.executeQuery());
 
-		for (TeamBean team : teams) {
+		for (Team team : teams) {
 			PreparedStatement membersQuery = manager.prepareQuery("SELECT user_id FROM subscriptions WHERE team_id = ?");
 			membersQuery.setLong(1, team.id);
 			
@@ -59,27 +75,15 @@ public class TeamDAO {
 			while(result.next())
 			{
 				long userID = result.getLong("user_id");
-				UserBean user = UserDAO.getUserByID(userID);
+				User user = UserDAO.getUserByID(userID);
 				team.members.add(user);
-			}
-			
-			PreparedStatement tournamentQuery = manager.prepareQuery("SELECT tournament_id FROM team_subscriptions WHERE team_id = ?");
-			tournamentQuery.setLong(1, team.id);
-			
-			ResultSet result2 = tournamentQuery.executeQuery();
-			
-			while(result2.next())
-			{
-				long tournamentID = result.getLong("tournament_id");
-				TournamentBean tournament = TournamentDAO.getTournamentByID(tournamentID);
-				team.tournament = tournament;
 			}
 		}
 
 		return teams;
 	}
 
-	public static int insertTeam(TeamBean team) throws SQLException, ClassNotFoundException {
+	public static int insertTeam(Team team) throws SQLException, ClassNotFoundException {
 		ConnectionManager manager = ConnectionManager.get();
 
 		PreparedStatement insertQuery = manager.prepareQuery("INSERT INTO team (name) VALUES (?)");
@@ -92,7 +96,7 @@ public class TeamDAO {
 		return result.rowsAffected;
 	}
 
-	public static int addUserToTeam(TeamBean team, UserBean user) throws SQLException, ClassNotFoundException {
+	public static int addUserToTeam(Team team, User user) throws SQLException, ClassNotFoundException {
 		ConnectionManager manager = ConnectionManager.get();
 
 		PreparedStatement insertQuery = manager

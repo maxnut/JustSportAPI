@@ -7,10 +7,10 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.TeamBean;
-import it.justsport.api.bean.UserBean;
 import it.justsport.api.dao.TeamDAO;
 import it.justsport.api.dao.UserDAO;
+import it.justsport.api.table.Team;
+import it.justsport.api.table.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,6 +39,16 @@ public class TeamSubscribeEndpoint extends HttpServlet {
 		
 		String teamID = request.getParameter("team_id");
 		String userID = request.getParameter("user_id");
+		String userEmail = request.getParameter("user_email");
+		
+		try {
+			
+		if(userEmail != null)
+		{
+			User user = UserDAO.getUserByEmail(userEmail);
+			if(user != null)
+				userID = String.valueOf(user.id);
+		}
 		
 		if(teamID == null || userID == null)
 		{
@@ -46,9 +56,9 @@ public class TeamSubscribeEndpoint extends HttpServlet {
 			return;
 		}
 		
-		try {
-			UserBean user = UserDAO.getUserByID(Long.parseLong(userID));
-			TeamBean team = TeamDAO.getTeamByID(Long.parseLong(teamID));
+		
+			User user = UserDAO.getUserByID(Long.parseLong(userID));
+			Team team = TeamDAO.getTeamByID(Long.parseLong(teamID));
 			
 			if(user == null || team == null)
 			{

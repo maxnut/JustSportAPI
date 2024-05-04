@@ -8,8 +8,8 @@ import com.google.gson.Gson;
 
 import it.justsport.api.Responses;
 import it.justsport.api.Responses.Response;
-import it.justsport.api.bean.TeamBean;
 import it.justsport.api.dao.TeamDAO;
+import it.justsport.api.table.Team;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,7 +34,7 @@ public class GetAllTeamsEndpoint extends HttpServlet {
 				return;
 			}
 
-			ArrayList<TeamBean> teams = TeamDAO.getTeams();
+			ArrayList<Team> teams = TeamDAO.getTeams();
 			Gson gson = new Gson();
 			Responses.respondWithObject(response, Response.OK, gson.toJsonTree(teams));
 		} catch (ClassNotFoundException | SQLException e) {
